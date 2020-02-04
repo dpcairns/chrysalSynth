@@ -1,4 +1,4 @@
-import { WavyJones } from "./wavy-jones.js";
+import { OScope } from "./oscope.js";
 
 var context = null;   // the Web Audio "context" object
 var midiAccess = null;  // the MIDIAccess object.
@@ -24,7 +24,7 @@ window.addEventListener('click', function() {
     if (!activeMusic) {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         context = new AudioContext();
-        const myOscilloscope = new WavyJones(context, 'oscilloscope');
+        const myOscilloscope = new OScope(context, 'oscilloscope');
         if (navigator.requestMIDIAccess)
             navigator.requestMIDIAccess().then(onMIDIInit, onMIDIReject);
         else
@@ -34,7 +34,7 @@ window.addEventListener('click', function() {
         oscillator.frequency.setValueAtTime(110, 0);
         envelope = context.createGain();
         oscillator.connect(envelope);
-        oscillator.type = 'sawtooth';
+        oscillator.type = 'sine';
         // envelope.connect(context.destination);
         envelope.connect(myOscilloscope);
         myOscilloscope.connect(context.destination);
