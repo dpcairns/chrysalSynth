@@ -1,3 +1,5 @@
+import { WavyJones } from "./wavy-jones.js";
+
 var context = null;   // the Web Audio "context" object
 var midiAccess = null;  // the MIDIAccess object.
 var oscillator = null;  // the single oscillator
@@ -16,11 +18,13 @@ let attackPlayback = 0.05;      // attack speed
 let releasePlayback = 0.05;   // release speed
 let portamentoPlayback = 0;  // portamento/glide speed
 let recordStartTime = null;
+
 window.addEventListener('click', function() {
   // patch up prefixes
     if (!activeMusic) {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         context = new AudioContext();
+        const myOscilloscope = new WavyJones(context, 'oscilloscope');
         if (navigator.requestMIDIAccess)
             navigator.requestMIDIAccess().then(onMIDIInit, onMIDIReject);
         else
@@ -31,13 +35,27 @@ window.addEventListener('click', function() {
         envelope = context.createGain();
         oscillator.connect(envelope);
         oscillator.type = 'sawtooth';
-        envelope.connect(context.destination);
+        // envelope.connect(context.destination);
+        envelope.connect(myOscilloscope);
+        myOscilloscope.connect(context.destination);
         envelope.gain.value = 0.0;  // Mute the sound
         oscillator.start();  // Go ahead and start up the oscillator
         context.resume();
         activeMusic = true;
     };
 });
+
+
+// var context = new AudioContext(),
+//     sineWave = context.createOscillator(),
+//     myOscilloscope = new WavyJones(context, 'oscilloscope');
+
+// sineWave.connect(myOscilloscope);
+// myOscilloscope.connect(context.destination);
+
+// sineWave.start(0);
+
+
 function onMIDIInit(midi) {
     midiAccess = midi;
     var haveAtLeastOneDevice=false;

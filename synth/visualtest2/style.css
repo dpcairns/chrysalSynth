@@ -1,0 +1,16 @@
+/* * {
+    background: #111;
+    color: #bbb;
+    outline: 1px dotted #666;
+  }
+  
+  div {
+    float: left;
+    border: 2px solid #aaa;
+    border-radius: 10px;
+  } */
+
+  #oscilloscope {
+    width: 400px;
+    height: 200px;
+}
