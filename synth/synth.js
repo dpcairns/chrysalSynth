@@ -95,7 +95,9 @@ document.addEventListener('DOMContentLoaded', function(event) {
     };
   
     //CONNECTIONS
-    gain.connect(myOscilloscope);
+    // gain.connect(myOscilloscope);
+    gain.connect(filterLP);
+    filterLP.connect(myOscilloscope);
     // filterLP.connect(filterHP);
     // filterHP.connect(filterBP);
     // filterBP.connect(myOscilloscope);
@@ -112,8 +114,10 @@ document.addEventListener('DOMContentLoaded', function(event) {
     });
 
     frequencyControlLP.addEventListener('mousemove', function(event) {
-        filterLP.type = 'lowpass';
+        filterLP.type = 'peaking';
         filterLP.frequency.setValueAtTime(event.target.value, audioCtx.currentTime);
+        // filterLP.Q.value = 100;
+
     });
 
     frequencyControlHP.addEventListener('mousemove', function(event) {
