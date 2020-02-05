@@ -32,7 +32,7 @@ const gainControl = document.getElementById('gain');
 const frequencyControlLP = document.getElementById('filterFrequencyLP');
 const frequencyControlHP = document.getElementById('filterFrequencyHP');
 const frequencyControlBP = document.getElementById('filterFrequencyBP');
-const lfoControl = document.getElementById('lfoValue');
+// const lfoControl = document.getElementById('lfoValue');
 
 
 
@@ -81,22 +81,23 @@ document.addEventListener('DOMContentLoaded', function(event) {
         // '85': 987.766602512248223,  //U - B
     };
 
-    //LFO
-    let lfo = audioCtx.createOscillator();
-    lfo.type = 'square';
-    lfo.frequency.value = 10;
-    let lfoGain = audioCtx.createGain();
-    lfo.connect(lfoGain);   
-    lfo.start();
-    lfoGain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+    // //LFO
+    // let lfo = audioCtx.createOscillator();
+    // lfo.type = 'square';
+    // lfo.frequency.value = 10;
+    // let lfoGain = audioCtx.createGain();
+    // lfo.connect(lfoGain);   
+    // lfo.start();
+    // lfoGain.gain.setValueAtTime(0.25, audioCtx.currentTime);
 
 
   
     //CONNECTIONS
-    gain.connect(filterLP);
-    filterLP.connect(filterHP);
-    filterHP.connect(filterBP);
-    filterBP.connect(myOscilloscope);
+    gain.connect(myOscilloscope);
+    // gain.connect(filterLP);
+    // filterLP.connect(filterHP);
+    // filterHP.connect(filterBP);
+    // filterBP.connect(myOscilloscope);
     myOscilloscope.connect(audioCtx.destination);
   
     //EVENT LISTENERS FOR SYNTH PARAMETER INTERFACE
@@ -123,13 +124,35 @@ document.addEventListener('DOMContentLoaded', function(event) {
         filterBP.frequency.setValueAtTime(event.target.value, audioCtx.currentTime);
     });
 
-    lfoControl.addEventListener('change', function(event) {
-        lfo.frequency.setValueAtTime(event.target.value, audioCtx.currentTime);
-    });
+    // lfoControl.addEventListener('change', function(event) {
+    //     lfo.frequency.setValueAtTime(event.target.value, audioCtx.currentTime);
+    // });
   
     //EVENT LISTENERS FOR MUSICAL KEYBOARD
     window.addEventListener('keydown', keyDown, false);
+
     window.addEventListener('keyup', keyUp, false);
+
+    //EVENT LISTENERS FOR THE KEYBOARD IMAGES FOR COMPUTER KEYBOARD
+    window.addEventListener('keydown', function(e) {
+        const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+        key.classList.add('active');
+    });
+
+    window.addEventListener('keyup', function(e) {
+        const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+        key.classList.remove('active');
+    });
+
+    // window.addEventListener('mousedown', function(e){
+    //     keyDown(e);
+    //     playNote(e);
+        
+    // });
+
+    // window.addEventListener('mouseup', function(e){
+    //     keyUp(e);
+    // });
   
     //CALLED ON KEYDOWN EVENT - CALLS PLAYNOTE IF KEY PRESSED IS ON MUSICAL
     //KEYBOARD && THAT KEY IS NOT CURRENTLY ACTIVE
@@ -147,6 +170,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
         if (keyboardFrequencyMap[key] && !activeOscillators[key]) {
             playNote(key);
         }
+        // return key;
     }
   
     //STOPS & DELETES OSCILLATOR ON KEY RELEASE IF KEY RELEASED IS ON MUSICAL
@@ -166,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
             activeOscillators[key].stop();
             delete activeOscillators[key];
         }
-        lfoGain.disconnect(audioCtx.destination);
+        // lfoGain.disconnect(audioCtx.destination);
     }
   
     //HANDLES CREATION & STORING OF OSCILLATORS
@@ -262,12 +286,12 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
 
 
-    //RECORDING
+    // //RECORDING
 
-    recordStartButton.addEventListener('click', () => {
-        musicalLayer = [];
-        recordStartTime = audioCtx.currentTime;
-    });
+    // recordStartButton.addEventListener('click', () => {
+    //     musicalLayer = [];
+    //     recordStartTime = audioCtx.currentTime;
+    // });
     
     function storingMusic(musicObject) {
         musicalLayer.push(musicObject);
