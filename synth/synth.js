@@ -34,12 +34,28 @@ const waveformControlSquare = document.getElementById('square');
 const waveformControlTriangle = document.getElementById('triangle');
 const waveformControlSawtooth = document.getElementById('sawtooth');
 
+<<<<<<< HEAD
 //NOT WORKING RN
 // const waveformControl = document.querySelector('input[name="waveform"]:checked');
 let waveform = waveformControlSine.value || waveformControlSquare.value || waveformControlTriangle.value || waveformControlSawtooth.value;
 
 console.log(waveform);
 //NOT WORKING RN
+=======
+const bitcrushToggle = document.getElementById('bitcrush-toggle');
+// const verbToggle = document.getElementById('verb-toggle');
+// const filterToggle = document.getElementById('filter-toggle');
+
+// DOM SYNTH CONTROLS
+const waveformControlSine = document.getElementById('sine');
+const waveformControlSquare = document.getElementById('square');
+const waveformControlTriangle = document.getElementById('triangle');
+const waveformControlSawtooth = document.getElementById('sawtooth');
+let waveform = waveformControlSine.value || waveformControlSquare.value || waveformControlTriangle.value || waveformControlSawtooth.value;
+// PLAYBACK DOM
+const playbackSpeed = document.getElementById('playback-speed');
+const loopToggle = document.getElementById('loop-toggle');
+>>>>>>> 6c8fbe81c565862616955353c57ec39fb4988c51
 
 
 
@@ -156,14 +172,15 @@ document.addEventListener('DOMContentLoaded', function(event) {
     //CONNECTIONS
 
     gain.connect(filterLP);
-    filterLP.connect(bitcrushEffect);
-    bitcrushEffect.connect(convolverEffect);
+    filterLP.connect(convolverEffect);
+    // bitcrushEffect.connect(convolverEffect);
     convolverEffect.connect(compressor);
     compressor.connect(myOscilloscope);
     myOscilloscope.connect(audioCtx.destination);
     
     //EVENT LISTENERS FOR SYNTH PARAMETER INTERFACE
 
+<<<<<<< HEAD
     //NOT WORKING RN
     waveformControlSine.addEventListener('click', function(event) {
         waveform = event.target.value;
@@ -171,9 +188,33 @@ document.addEventListener('DOMContentLoaded', function(event) {
     });
 
     waveformControlSquare.addEventListener('click', function(event) {
-        waveform = event.target.value;
-        console.log(waveform);
+=======
+    bitcrushToggle.addEventListener('click', () => {
+        if (bitcrushToggle.checked) {
+            filterLP.disconnect(convolverEffect);
+            filterLP.connect(bitcrushEffect);
+            bitcrushEffect.connect(convolverEffect);
+        } else {
+            filterLP.disconnect(bitcrushEffect);
+            filterLP.connect(convolverEffect);
+        }
     });
+
+    //EVENT LISTENERS FOR SYNTH WAVESHAPE PARAMETER INTERFACE
+    waveformControlSine.addEventListener('click', function(event) {
+        waveform = event.target.value;
+    });
+    waveformControlSquare.addEventListener('click', function(event) {
+        waveform = event.target.value;
+    });
+    waveformControlTriangle.addEventListener('click', function(event) {
+        waveform = event.target.value;
+    });
+    waveformControlSawtooth.addEventListener('click', function(event) {
+>>>>>>> 6c8fbe81c565862616955353c57ec39fb4988c51
+        waveform = event.target.value;
+    });
+<<<<<<< HEAD
 
     waveformControlTriangle.addEventListener('click', function(event) {
         waveform = event.target.value;
@@ -187,6 +228,8 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
     // waveformControlSine
     //NOT WORKING RN
+=======
+>>>>>>> 6c8fbe81c565862616955353c57ec39fb4988c51
   
     gainControl.addEventListener('mousemove', function(event) {
         gain.gain.setValueAtTime(event.target.value, audioCtx.currentTime);
@@ -364,40 +407,39 @@ document.addEventListener('DOMContentLoaded', function(event) {
         }
     }
 
+    function storingMusic(musicObject) {
+        musicalLayer.push(musicObject);
+    }
+
+
+
 
     //RECORDING
 
     recordStartButton.addEventListener('click', () => {
+        recordingEvents();
+    });
+
+    window.addEventListener('keyup', (e) => {
+        const x = e.keyCode;
+        if (x === 82 && recordStartButton.checked === false){
+            recordStartButton.checked = true;
+            recordingEvents();
+        } else if (x === 82) {
+            recordStartButton.checked = false;
+            recordingEvents();
+        }        
+    });
+
+    function recordingEvents() {
         if (recordStartButton.checked) {
             musicalLayer = [];
             recordStartTime = audioCtx.currentTime;
+            console.log('recording');
         } else if (!recordStartButton.checked) {
             layerToStore = musicalLayer.slice();
+            console.log('stop recording');
         }
-    });
-
-    // window.addEventListener('keyup', (e) => {
-    //     if (e.keyCode === 82 && !recordStartButton.checked) {
-    //         recordStartButton.checked;
-    //         musicalLayer = [];
-    //         console.log(musicalLayer);
-    //         recordStartTime = audioCtx.currentTime;
-    //         console.log('r has been pressed');
-
-    //     } else if (e.keyCode === 82 && recordStartButton.checked) {
-    //         layerToStore = musicalLayer.slice(); 
-    //         !recordStartButton.checked;
-    //         console.log('r has been pressed again');  
-    //     } else if (recordStartButton.checked) {
-    //         console.log('r has been pressed again return'); 
-    //         return;
-    //     }
-    // });
-
-
-    
-    function storingMusic(musicObject) {
-        musicalLayer.push(musicObject);
     }
 
     function SaveSong(name, layerToStore) {
@@ -420,6 +462,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
         const newOption = document.createElement('option');
         newOption.value = newSong.name;
         newOption.textContent = newSong.name;
+        newOption.selected = true;
         savedSessions.appendChild(newOption);
     });
 
@@ -437,13 +480,13 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
     function playStoredMusic(musicalLayer) {
 
+        // console.log(playbackSpeed.value);
+
         contextPlayback = new AudioContext();
         const activeOscillatorsPlayback = {};
-        const playbackMultiplier = 1;
-        // const lastNoteTime = musicalLayer.length; 
-        // const loopTime = (musicalLayer[lastNoteTime - 1].note_time);
-        // console.log(loopTime);
-    
+        const playbackMultiplier = playbackSpeed.value;
+        const lastNoteTime = musicalLayer.length; 
+        const loopTime = (musicalLayer[lastNoteTime - 1].note_time);   
     
         for (let i = 0; i < musicalLayer.length; i++){
             const currentNoteValue = musicalLayer[i];              
@@ -483,8 +526,11 @@ document.addEventListener('DOMContentLoaded', function(event) {
             }
             
         }
-        // setTimeout(() => playStoredMusic(musicalLayer), (loopTime * (1 / playbackMultiplier)) * 1000); 
-        // contextPlayback.currentTime = loopTime       
+        if (loopToggle.checked) {
+            setTimeout(() => playStoredMusic(musicalLayer), (loopTime * (1 / playbackMultiplier)) * 1000); 
+            // contextPlayback.currentTime = loopTime; 
+        }
+     
     }
 });
 
