@@ -29,11 +29,16 @@ const recordPlayButton = document.getElementById('playbutton');
 updateSongs();
 
 // DOM SYNTH CONTROLS
-// const waveformControl = document.getElementById('waveform');
+const waveformControlSine = document.getElementById('sine');
+const waveformControlSquare = document.getElementById('square');
+const waveformControlTriangle = document.getElementById('triangle');
+const waveformControlSawtooth = document.getElementById('sawtooth');
 
 //NOT WORKING RN
-const waveformControl = document.querySelector('input[name="waveform"]:checked');
-let waveform = waveformControl.value;
+// const waveformControl = document.querySelector('input[name="waveform"]:checked');
+let waveform = waveformControlSine.value || waveformControlSquare.value || waveformControlTriangle.value || waveformControlSawtooth.value;
+
+console.log(waveform);
 //NOT WORKING RN
 
 
@@ -160,10 +165,27 @@ document.addEventListener('DOMContentLoaded', function(event) {
     //EVENT LISTENERS FOR SYNTH PARAMETER INTERFACE
 
     //NOT WORKING RN
-    waveformControl.addEventListener('click', function(event) {
+    waveformControlSine.addEventListener('click', function(event) {
         waveform = event.target.value;
         console.log(waveform);
     });
+
+    waveformControlSquare.addEventListener('click', function(event) {
+        waveform = event.target.value;
+        console.log(waveform);
+    });
+
+    waveformControlTriangle.addEventListener('click', function(event) {
+        waveform = event.target.value;
+        console.log(waveform);
+    });
+
+    waveformControlSawtooth.addEventListener('click', function(event) {
+        waveform = event.target.value;
+        console.log(waveform);
+    });
+
+    // waveformControlSine
     //NOT WORKING RN
   
     gainControl.addEventListener('mousemove', function(event) {
@@ -251,7 +273,9 @@ document.addEventListener('DOMContentLoaded', function(event) {
     function playNote(key) {
         const osc = audioCtx.createOscillator();
         osc.frequency.setValueAtTime(keyboardFrequencyMap[key], audioCtx.currentTime);
+        
         osc.type = waveform;
+        // console.log(osc.type);
         activeOscillators[key] = osc;
         activeOscillators[key].connect(gain);
         activeOscillators[key].start();
@@ -324,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
         };
         storingMusic(midiObject);
 
-        console.log(gain);
+        // console.log(midiObject);
 
         switch (event.data[0] & 0xf0) {
             case 0x90:

@@ -1086,7 +1086,7 @@ function PureKnob() {
 			
         };
 		
-        canvas.addEventListener('dblclick', doubleClickListener);
+        // canvas.addEventListener('dblclick', doubleClickListener);
         canvas.addEventListener('mousedown', mouseDownListener);
         canvas.addEventListener('mouseleave', mouseCancelListener);
         canvas.addEventListener('mousemove', mouseMoveListener);

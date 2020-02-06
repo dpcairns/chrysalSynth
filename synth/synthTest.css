@@ -11,6 +11,8 @@ input:checked + .image-class {
     border: 2px dotted white;
 }
 
+/* input[name="waveform"]:checked */
+
 
 /* #waveshapes + input {
     display: none;
@@ -173,8 +175,8 @@ input:checked + .image-class {
     /* width: 20%; */
     text-align: center;
     margin: auto;
-
 } */
+
   .div4 {
     flex: 0 0 auto;
     margin: 4px;
